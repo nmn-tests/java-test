@@ -1,6 +1,5 @@
 package io.github.namuan.shop;
 
 public enum Product {
-    SOUP,
-    BREAD, APPLE, MILK, WATER;
+    SOUP, BREAD, APPLE, MILK;
 }

@@ -22,6 +22,11 @@ public class Basket {
         return this;
     }
 
+    public Basket withItem(BasketItem basketItem) {
+        this.basketItems.add(basketItem);
+        return this;
+    }
+
     public List<BasketItem> items() {
         return this.basketItems;
     }
