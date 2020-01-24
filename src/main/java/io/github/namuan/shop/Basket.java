@@ -8,17 +8,18 @@ public class Basket {
     private List<BasketItem> basketItems = new ArrayList<>();
     private LocalDate createdDate;
 
-    public Basket() {
+    private Basket() {
         this(LocalDate.now());
     }
 
-    public Basket(LocalDate createdDate) {
+    private Basket(LocalDate createdDate) {
         this.createdDate = createdDate;
     }
 
-    public void addItem(Product product, int quantity) {
+    public Basket withItem(Product product, int quantity) {
         BasketItem basketItem = new BasketItem(product, quantity);
         this.basketItems.add(basketItem);
+        return this;
     }
 
     public List<BasketItem> items() {
@@ -28,4 +29,13 @@ public class Basket {
     public LocalDate getCreatedDate() {
         return createdDate;
     }
+
+    public static Basket builder() {
+        return new Basket();
+    }
+
+    public static Basket builder(LocalDate createdDate) {
+        return new Basket(createdDate);
+    }
+
 }
