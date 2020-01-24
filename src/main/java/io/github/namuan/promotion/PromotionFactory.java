@@ -5,7 +5,7 @@ import java.util.List;
 
 public class PromotionFactory {
 
-    public static List<HalfPriceLoafPromotion> availablePromotions() {
-        return Arrays.asList(new HalfPriceLoafPromotion());
+    public static List<Promotion> availablePromotions() {
+        return Arrays.asList(new HalfPriceLoafPromotion(), new ApplesPromotion());
     }
 }

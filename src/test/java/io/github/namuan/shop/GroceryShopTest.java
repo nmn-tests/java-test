@@ -2,7 +2,9 @@ package io.github.namuan.shop;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.time.LocalDate;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GroceryShopTest {
 
@@ -37,14 +39,14 @@ class GroceryShopTest {
     public void testCalculateCostForABasketWithMultipleItems() {
         // given
         Basket basket = new Basket();
-        basket.addItem(Product.SOUP, 2);
+        basket.addItem(Product.SOUP, 1);
         basket.addItem(Product.BREAD, 1);
 
         // when
         double basketCost = groceryShop.calculate(basket);
 
         // then
-        assertEquals(2.1, basketCost);
+        assertEquals(1.45, basketCost);
     }
 
     @Test
@@ -77,4 +79,16 @@ class GroceryShopTest {
         assertEquals(1.7, basketCost);
     }
 
+    @Test
+    public void testCalculateDiscountPromotionForApples() {
+        // given
+        Basket basket = new Basket(LocalDate.now().plusDays(3));
+        basket.addItem(Product.APPLE, 5);
+
+        // when
+        double basketCost = groceryShop.calculate(basket);
+
+        // then
+        assertEquals(0.45, basketCost);
+    }
 }

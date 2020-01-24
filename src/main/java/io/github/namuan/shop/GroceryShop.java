@@ -33,13 +33,15 @@ public class GroceryShop {
         double discount = 0.0;
 
         for (Promotion promotion : availablePromotions()) {
-            discount += promotion.apply(basket);
+            if (promotion.isValid(basket.getCreatedDate())) {
+                discount += promotion.apply(basket);
+            }
         }
 
         return roundOff(basketCost - discount);
     }
 
-    private List<HalfPriceLoafPromotion> availablePromotions() {
+    private List<Promotion> availablePromotions() {
         return PromotionFactory.availablePromotions();
     }
 

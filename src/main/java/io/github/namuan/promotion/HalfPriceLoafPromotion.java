@@ -5,6 +5,8 @@ import io.github.namuan.shop.BasketItem;
 import io.github.namuan.shop.Product;
 import io.github.namuan.shop.StockItems;
 
+import java.time.LocalDate;
+
 public class HalfPriceLoafPromotion implements Promotion {
     @Override
     public double apply(Basket basket) {
@@ -17,13 +19,10 @@ public class HalfPriceLoafPromotion implements Promotion {
         return StockItems.priceOf(Product.BREAD) / 2;
     }
 
-    public int getQuantityOfItemsInBasket(Basket basket, Product product) {
-        return basket
-                .items()
-                .stream()
-                .filter(item -> item.getProduct().equals(product))
-                .findFirst()
-                .map(BasketItem::getQuantity)
-                .orElse(0);
+    @Override
+    public boolean isValid(LocalDate basketCreatedDate) {
+        LocalDate from = LocalDate.now().minusDays(2);
+        LocalDate to = LocalDate.now().plusDays(8);
+        return basketCreatedDate.isAfter(from) && basketCreatedDate.isBefore(to);
     }
 }
