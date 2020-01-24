@@ -10,14 +10,13 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjusters;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class ApplesPromotionTest {
+class HalfPriceLoafPromotionTest {
 
-    ApplesPromotion applesPromotion = new ApplesPromotion();
+    HalfPriceLoafPromotion halfPriceLoafPromotion = new HalfPriceLoafPromotion();
 
     private static class PromotionDatesProvider implements ArgumentsProvider {
 
@@ -28,33 +27,26 @@ class ApplesPromotionTest {
         public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
             return Stream.of(
                     Arguments.of(
+                            LocalDate.now().minusDays(2),
+                            INVALID
+                    ),
+                    Arguments.of(
+                            LocalDate.now().minusDays(1),
+                            VALID
+                    ),
+                    Arguments.of(
                             LocalDate.now(),
-                            INVALID
-                    ),
-                    Arguments.of(
-                            LocalDate.now().plusDays(2),
-                            INVALID
-                    ),
-                    Arguments.of(
-                            LocalDate.now().plusDays(3),
                             VALID
                     ),
                     Arguments.of(
-                            LocalDate.now().plusMonths(2),
-                            INVALID
-                    ),
-                    Arguments.of(
-                            LocalDate.now().plusWeeks(3),
+                            LocalDate.now().plusDays(7),
                             VALID
                     ),
                     Arguments.of(
-                            LocalDate.now().plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()),
-                            VALID
-                    ),
-                    Arguments.of(
-                            LocalDate.now().plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).plusDays(1),
+                            LocalDate.now().plusDays(8),
                             INVALID
                     )
+
             );
         }
 
@@ -64,31 +56,44 @@ class ApplesPromotionTest {
     @ArgumentsSource(PromotionDatesProvider.class)
     public void testPromotionValidityBasedOnDates(LocalDate basketCreatedDate, boolean isValid) {
         // when
-        assertEquals(isValid, applesPromotion.isValid(basketCreatedDate));
+        assertEquals(isValid, halfPriceLoafPromotion.isValid(basketCreatedDate));
     }
 
     @Test
-    public void testThatNoDiscountIsAppliedIfNoApplesInBasket() {
+    public void testThatNoDiscountIsAppliedIfNoItemsInBasket() {
         // given
         Basket basket = Basket.builder();
 
         // when
-        double appliedDiscount = applesPromotion.apply(basket);
+        double appliedDiscount = halfPriceLoafPromotion.apply(basket);
 
         // then
         assertEquals(0.0, appliedDiscount);
     }
 
     @Test
-    public void testThatDiscountIsAppliedIfApplesInBasket() {
+    public void testThatNoDiscountIsAppliedIfNotEnoughApplesOrBreadInBasket() {
         // given
-        Basket basket = Basket.builder().withItem(Product.APPLE, 10);
+        Basket basket = Basket.builder();
+        basket.withItem(Product.APPLE, 2);
 
         // when
-        double discountApplied = applesPromotion.apply(basket);
+        double appliedDiscount = halfPriceLoafPromotion.apply(basket);
 
         // then
-        assertEquals(0.1, discountApplied);
+        assertEquals(0.0, appliedDiscount);
+    }
+
+    @Test
+    public void testThatDiscountIsAppliedIfApplicableForItemsInBasket() {
+        // given
+        Basket basket = Basket.builder().withItem(Product.SOUP, 2).withItem(Product.BREAD, 1);
+
+        // when
+        double discountApplied = halfPriceLoafPromotion.apply(basket);
+
+        // then
+        assertEquals(0.4, discountApplied);
     }
 
 }

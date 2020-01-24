@@ -21,7 +21,7 @@ public class ApplesPromotion implements Promotion {
     @Override
     public boolean isValid(LocalDate basketCreatedDate) {
         LocalDate from = LocalDate.now().plusDays(2);
-        LocalDate to = LocalDate.now().plusMonths(1).with(TemporalAdjusters.lastDayOfMonth());
+        LocalDate to = LocalDate.now().plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).plusDays(1);
         return basketCreatedDate.isAfter(from) && basketCreatedDate.isBefore(to);
     }
 }

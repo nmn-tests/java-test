@@ -1,7 +1,6 @@
 package io.github.namuan.promotion;
 
 import io.github.namuan.shop.Basket;
-import io.github.namuan.shop.BasketItem;
 import io.github.namuan.shop.Product;
 import io.github.namuan.shop.StockItems;
 
