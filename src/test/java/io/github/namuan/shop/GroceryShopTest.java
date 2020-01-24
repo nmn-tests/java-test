@@ -63,4 +63,18 @@ class GroceryShopTest {
         assertEquals(2.85, basketCost);
     }
 
+    @Test
+    public void testCalculateDiscountPromotionForHalfBreadPrice() {
+        // given
+        Basket basket = new Basket();
+        basket.addItem(Product.SOUP, 2);
+        basket.addItem(Product.BREAD, 1);
+
+        // when
+        double basketCost = groceryShop.calculate(basket);
+
+        // then
+        assertEquals(1.7, basketCost);
+    }
+
 }

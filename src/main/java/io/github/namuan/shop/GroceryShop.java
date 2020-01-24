@@ -1,5 +1,9 @@
 package io.github.namuan.shop;
 
+import io.github.namuan.promotion.HalfPriceLoafPromotion;
+import io.github.namuan.promotion.Promotion;
+import io.github.namuan.promotion.PromotionFactory;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -26,7 +30,17 @@ public class GroceryShop {
             basketCost += StockItems.priceOf(product) * quantity;
         }
 
-        return roundOff(basketCost);
+        double discount = 0.0;
+
+        for (Promotion promotion : availablePromotions()) {
+            discount += promotion.apply(basket);
+        }
+
+        return roundOff(basketCost - discount);
+    }
+
+    private List<HalfPriceLoafPromotion> availablePromotions() {
+        return PromotionFactory.availablePromotions();
     }
 
     private double roundOff(double input) {
